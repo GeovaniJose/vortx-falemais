@@ -9,15 +9,15 @@ interface ContentProps {
 }
 
 export const Label = styled.label`
+  display: block;
+
   p {
     padding-left: 18px;
     padding-bottom: 2px;
   }
 
   & + label {
-    display: block;
     margin-top: 16px;
-    text-align: justify;
   }
 `;
 
