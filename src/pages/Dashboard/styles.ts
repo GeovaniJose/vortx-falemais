@@ -37,10 +37,12 @@ export const AnimatedSuccess = styled(animated.section)`
     align-items: center;
   }
 
-  > a {
+  > button {
     display: block;
     align-self: center;
     text-decoration: none;
+    border: none;
+    background: none;
     color: #ae8952;
     transition: color 0.2s;
 
@@ -62,6 +64,7 @@ export const Card = styled.div`
   position: relative;
   width: 250px;
   height: 300px;
+  margin-left: 38px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -71,10 +74,9 @@ export const Card = styled.div`
   text-align: center;
   background-color: #fff;
 
-  &:first-child {
+  &:last-child {
     width: 300px;
     height: 400px;
-    margin-right: 38px;
     border: 3px solid #ae8952;
 
     span {

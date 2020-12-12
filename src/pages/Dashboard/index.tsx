@@ -1,10 +1,10 @@
 import React, { useCallback, useMemo, useRef, useState } from 'react';
-import { Link } from 'react-router-dom';
 import { FormHandles } from '@unform/core';
 import { useTransition } from 'react-spring';
 import { FiArrowLeft } from 'react-icons/fi';
 import * as Yup from 'yup';
 
+import { useHistoric } from '../../hooks/historic';
 import getValidationErrors from '../../utils/getValidationErrors';
 
 import Header from '../../components/Header';
@@ -20,16 +20,19 @@ import {
   Card,
 } from './styles';
 
-interface SignInFormData {
+interface CalculateFormData {
   origem: number;
   destino: number;
   tempo: number;
+  plano: string;
 }
 
 const Dashboard: React.FC = () => {
+  const { historic, addHistoric } = useHistoric();
+
   const formRef = useRef<FormHandles>(null);
 
-  const [formSuccess, setFormSuccess] = useState(false);
+  const [formSuccess, setFormSuccess] = useState(true);
 
   const transitionForm = useTransition(formSuccess, null, {
     from: { opacity: 0, transform: 'translateX(-70vw)' },
@@ -44,7 +47,7 @@ const Dashboard: React.FC = () => {
   });
 
   const handleSubmit = useCallback(
-    async (data: SignInFormData) => {
+    async (data: CalculateFormData) => {
       try {
         formRef.current?.setErrors({});
 
@@ -69,6 +72,8 @@ const Dashboard: React.FC = () => {
           abortEarly: false,
         });
 
+        addHistoric(data);
+
         setFormSuccess(!formSuccess);
       } catch (err) {
         if (err instanceof Yup.ValidationError) {
@@ -82,17 +87,21 @@ const Dashboard: React.FC = () => {
         alert('Ocorreu um erro');
       }
     },
-    [formSuccess],
+    [formSuccess, addHistoric],
   );
 
   const selectOptions = useMemo(
     () => [
-      { value: 'faleMais30', label: 'Fale Mais 30' },
-      { value: 'faleMais60', label: 'Fale Mais 60' },
-      { value: 'faleMais120', label: 'Fale Mais 120' },
+      { value: 'FaleMais 30', label: 'FaleMais 30' },
+      { value: 'FaleMais 60', label: 'FaleMais 60' },
+      { value: 'FaleMais 120', label: 'FaleMais 120' },
     ],
     [],
   );
+
+  const successData = useMemo(() => {
+    return historic[historic.length - 1];
+  }, [historic]);
 
   return (
     <Container>
@@ -132,7 +141,7 @@ const Dashboard: React.FC = () => {
                 />
 
                 <Select
-                  name="plan"
+                  name="plano"
                   defaultValue={selectOptions[0]}
                   options={selectOptions}
                   labelText="Plano"
@@ -144,42 +153,40 @@ const Dashboard: React.FC = () => {
         {transitionSuccess.map(
           ({ item, key, props }) =>
             item && (
-              <AnimatedSuccess
-                key={key}
-                style={props}
-                onClick={() => setFormSuccess(!formSuccess)}
-              >
+              <AnimatedSuccess key={key} style={props}>
                 <main>
-                  <Card>
-                    <span>
-                      Com
-                      <br />
-                      FaleMais
-                    </span>
-                    <p>Origem: 12</p>
-                    <p>Destino: 12</p>
-                    <p>Minutos: 12</p>
-                    <p>FaleMais 120</p>
-                    <strong>$167,20</strong>
-                  </Card>
-
                   <Card>
                     <span>
                       Sem
                       <br />
                       FaleMais
                     </span>
-                    <p>Origem: 12</p>
-                    <p>Destino: 12</p>
-                    <p>Minutos: 12</p>
-                    <strong>$380,00</strong>
+                    <p>{`Origem: ${successData.origem}`}</p>
+                    <p>{`Destino: ${successData.destino}`}</p>
+                    <p>{`Minutos: ${successData.tempo}`}</p>
+                    <strong>{`$${successData.price}`}</strong>
+                  </Card>
+                  <Card>
+                    <span>
+                      Com
+                      <br />
+                      FaleMais
+                    </span>
+                    <p>{`Origem: ${successData.origem}`}</p>
+                    <p>{`Destino: ${successData.destino}`}</p>
+                    <p>{`Minutos: ${successData.tempo}`}</p>
+                    <p>{successData.plano}</p>
+                    <strong>{`$${successData.priceDiscount}`}</strong>
                   </Card>
                 </main>
 
-                <Link to="/">
+                <button
+                  type="button"
+                  onClick={() => setFormSuccess(!formSuccess)}
+                >
                   <FiArrowLeft />
                   Voltar para logon
-                </Link>
+                </button>
               </AnimatedSuccess>
             ),
         )}
