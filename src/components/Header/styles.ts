@@ -1,4 +1,8 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
+
+interface MenuProps {
+  currentPath?: string;
+}
 
 export const Container = styled.header`
   position: fixed;
@@ -13,29 +17,41 @@ export const Content = styled.div`
   display: flex;
   align-items: center;
 
-  h1 {
+  a {
+    text-decoration: none;
+
+    h1 {
+      color: #ae8952;
+      font-weight: bold;
+    }
+  }
+`;
+
+export const Menu = styled.nav<MenuProps>`
+  margin-left: auto;
+
+  button,
+  a {
+    padding: 20px 10px;
+    border: 0;
     color: #ae8952;
-    font-weight: bold;
+    background: transparent;
+    transition: all 0.3s;
+
+    &:hover {
+      background: #ae8952;
+      color: #f4f2ed;
+    }
   }
 
-  nav {
-    margin-left: auto;
+  a {
+    margin-left: 10px;
 
-    button {
-      background: transparent;
-      border: 0;
-      color: #ae8952;
-      padding: 20px 10px;
-      transition: all 0.3s;
-
-      &:hover {
+    ${props =>
+      props.currentPath === '/historic' &&
+      css`
         background: #ae8952;
         color: #f4f2ed;
-      }
-    }
-
-    button + button {
-      margin-left: 10px;
-    }
+      `}
   }
 `;

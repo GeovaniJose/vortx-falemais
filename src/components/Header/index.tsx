@@ -1,17 +1,22 @@
 import React from 'react';
+import { Link, useLocation } from 'react-router-dom';
 
-import { Container, Content } from './styles';
+import { Container, Content, Menu } from './styles';
 
 const Header: React.FC = () => {
+  const location = useLocation();
+
   return (
     <Container>
       <Content>
-        <h1>VxTel</h1>
+        <Link to="/">
+          <h1>VxTel</h1>
+        </Link>
 
-        <nav>
+        <Menu currentPath={location.pathname}>
           <button type="button">Tabela de Preços</button>
-          <button type="button">Histórico</button>
-        </nav>
+          <Link to="/historic">Histórico</Link>
+        </Menu>
       </Content>
     </Container>
   );
