@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 import { Form } from '@unform/web';
 import { animated } from 'react-spring';
+import { shade } from 'polished';
 
 export const Container = styled.div`
   height: 100vh;
@@ -25,8 +26,87 @@ export const AnimatedForm = styled(animated(Form))`
 `;
 
 export const AnimatedSuccess = styled(animated.section)`
-  width: 400px;
-  height: 400px;
   position: absolute;
-  background-color: #ae8952;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+
+  main {
+    display: flex;
+    margin: 64px 0;
+    align-items: center;
+  }
+
+  > a {
+    display: block;
+    align-self: center;
+    text-decoration: none;
+    color: #ae8952;
+    transition: color 0.2s;
+
+    display: flex;
+    align-items: center;
+
+    &:hover {
+      color: ${shade(0.2, '#ae8952')};
+    }
+
+    svg {
+      margin-right: 12px;
+      margin-bottom: 2px;
+    }
+  }
+`;
+
+export const Card = styled.div`
+  position: relative;
+  width: 250px;
+  height: 300px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  border-radius: 10px;
+  text-align: center;
+  background-color: #fff;
+
+  &:first-child {
+    width: 300px;
+    height: 400px;
+    margin-right: 38px;
+    border: 3px solid #ae8952;
+
+    span {
+      background-image: linear-gradient(white, white),
+        linear-gradient(to bottom, #ae8952 50%, #fff 50%);
+    }
+  }
+
+  span {
+    position: absolute;
+    width: 110px;
+    height: 110px;
+    top: -56px;
+    font-size: 16px;
+    background-color: #fff;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border: 3px solid transparent;
+    border-radius: 50%;
+    background-origin: border-box;
+    background-clip: padding-box, border-box;
+  }
+
+  p + p {
+    margin-top: 8px;
+  }
+
+  strong {
+    margin: 28px 0;
+    font-size: 40px;
+  }
 `;

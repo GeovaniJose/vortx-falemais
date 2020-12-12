@@ -1,6 +1,8 @@
 import React, { useCallback, useMemo, useRef, useState } from 'react';
+import { Link } from 'react-router-dom';
 import { FormHandles } from '@unform/core';
 import { useTransition } from 'react-spring';
+import { FiArrowLeft } from 'react-icons/fi';
 import * as Yup from 'yup';
 
 import getValidationErrors from '../../utils/getValidationErrors';
@@ -10,7 +12,13 @@ import Input from '../../components/Input';
 import Select from '../../components/Select';
 import Button from '../../components/Button';
 
-import { Container, Content, AnimatedForm, AnimatedSuccess } from './styles';
+import {
+  Container,
+  Content,
+  AnimatedForm,
+  AnimatedSuccess,
+  Card,
+} from './styles';
 
 interface SignInFormData {
   origem: number;
@@ -21,7 +29,7 @@ interface SignInFormData {
 const Dashboard: React.FC = () => {
   const formRef = useRef<FormHandles>(null);
 
-  const [formSuccess, setFormSuccess] = useState(true);
+  const [formSuccess, setFormSuccess] = useState(false);
 
   const transitionForm = useTransition(formSuccess, null, {
     from: { opacity: 0, transform: 'translateX(-70vw)' },
@@ -140,7 +148,39 @@ const Dashboard: React.FC = () => {
                 key={key}
                 style={props}
                 onClick={() => setFormSuccess(!formSuccess)}
-              />
+              >
+                <main>
+                  <Card>
+                    <span>
+                      Com
+                      <br />
+                      FaleMais
+                    </span>
+                    <p>Origem: 12</p>
+                    <p>Destino: 12</p>
+                    <p>Minutos: 12</p>
+                    <p>FaleMais 120</p>
+                    <strong>$167,20</strong>
+                  </Card>
+
+                  <Card>
+                    <span>
+                      Sem
+                      <br />
+                      FaleMais
+                    </span>
+                    <p>Origem: 12</p>
+                    <p>Destino: 12</p>
+                    <p>Minutos: 12</p>
+                    <strong>$380,00</strong>
+                  </Card>
+                </main>
+
+                <Link to="/">
+                  <FiArrowLeft />
+                  Voltar para logon
+                </Link>
+              </AnimatedSuccess>
             ),
         )}
       </Content>
