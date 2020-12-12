@@ -1,6 +1,6 @@
-import React, { useCallback, useMemo, useRef } from 'react';
-import { Form } from '@unform/web';
+import React, { useCallback, useMemo, useRef, useState } from 'react';
 import { FormHandles } from '@unform/core';
+import { useTransition } from 'react-spring';
 import * as Yup from 'yup';
 
 import getValidationErrors from '../../utils/getValidationErrors';
@@ -10,7 +10,7 @@ import Input from '../../components/Input';
 import Select from '../../components/Select';
 import Button from '../../components/Button';
 
-import { Container, Content } from './styles';
+import { Container, Content, AnimatedForm, AnimatedSuccess } from './styles';
 
 interface SignInFormData {
   origem: number;
@@ -21,44 +21,61 @@ interface SignInFormData {
 const Dashboard: React.FC = () => {
   const formRef = useRef<FormHandles>(null);
 
-  const handleSubmit = useCallback(async (data: SignInFormData) => {
-    try {
-      formRef.current?.setErrors({});
+  const [formSuccess, setFormSuccess] = useState(true);
 
-      const schema = Yup.object().shape({
-        origem: Yup.number()
-          .typeError('DDD de origem obrigatório')
-          .required('DDD de origem obrigatório')
-          .min(11, 'Digite um DDD válido')
-          .max(99, 'Digite um DDD válido'),
-        destino: Yup.number()
-          .typeError('DDD de destino obrigatório')
-          .required('DDD de destino obrigatório')
-          .min(11, 'Digite um DDD válido')
-          .max(99, 'Digite um DDD válido'),
-        tempo: Yup.number()
-          .typeError('Tempo de ligação obrigatório')
-          .required('Tempo de ligação obrigatório')
-          .positive('Digite um tempo de ligação válido'),
-      });
+  const transitionForm = useTransition(formSuccess, null, {
+    from: { opacity: 0, transform: 'translateX(-70vw)' },
+    enter: { opacity: 1, transform: 'translateX(0%)' },
+    leave: { opacity: 0, transform: 'translateX(-70vw)' },
+  });
 
-      await schema.validate(data, {
-        abortEarly: false,
-      });
+  const transitionSuccess = useTransition(!formSuccess, null, {
+    from: { opacity: 0, transform: 'translateX(70vw)' },
+    enter: { opacity: 1, transform: 'translateX(0%)' },
+    leave: { opacity: 0, transform: 'translateX(70vw)' },
+  });
 
-      console.log('DATA', data);
-    } catch (err) {
-      if (err instanceof Yup.ValidationError) {
-        const errors = getValidationErrors(err);
+  const handleSubmit = useCallback(
+    async (data: SignInFormData) => {
+      try {
+        formRef.current?.setErrors({});
 
-        formRef.current?.setErrors(errors);
+        const schema = Yup.object().shape({
+          origem: Yup.number()
+            .typeError('DDD de origem obrigatório')
+            .required('DDD de origem obrigatório')
+            .min(11, 'Digite um DDD válido')
+            .max(99, 'Digite um DDD válido'),
+          destino: Yup.number()
+            .typeError('DDD de destino obrigatório')
+            .required('DDD de destino obrigatório')
+            .min(11, 'Digite um DDD válido')
+            .max(99, 'Digite um DDD válido'),
+          tempo: Yup.number()
+            .typeError('Tempo de ligação obrigatório')
+            .required('Tempo de ligação obrigatório')
+            .positive('Digite um tempo de ligação válido'),
+        });
 
-        return;
+        await schema.validate(data, {
+          abortEarly: false,
+        });
+
+        setFormSuccess(!formSuccess);
+      } catch (err) {
+        if (err instanceof Yup.ValidationError) {
+          const errors = getValidationErrors(err);
+
+          formRef.current?.setErrors(errors);
+
+          return;
+        }
+
+        alert('Ocorreu um erro');
       }
-
-      alert('Ocorreu um erro');
-    }
-  }, []);
+    },
+    [formSuccess],
+  );
 
   const selectOptions = useMemo(
     () => [
@@ -74,38 +91,58 @@ const Dashboard: React.FC = () => {
       <Header />
 
       <Content>
-        <Form ref={formRef} onSubmit={handleSubmit}>
-          <h1>Calcule o valor da sua ligação</h1>
+        {transitionForm.map(
+          ({ item, key, props }) =>
+            item && (
+              <AnimatedForm
+                key={key}
+                ref={formRef}
+                onSubmit={handleSubmit}
+                style={props}
+              >
+                <h1>Calcule o valor da sua ligação</h1>
 
-          <Input
-            name="origem"
-            type="number"
-            labelText="DDD de origem"
-            placeholder="Ex: 011"
-          />
+                <Input
+                  name="origem"
+                  type="number"
+                  labelText="DDD de origem"
+                  placeholder="Ex: 011"
+                />
 
-          <Input
-            name="destino"
-            type="number"
-            labelText="DDD de destino"
-            placeholder="Ex: 016"
-          />
+                <Input
+                  name="destino"
+                  type="number"
+                  labelText="DDD de destino"
+                  placeholder="Ex: 016"
+                />
 
-          <Input
-            name="tempo"
-            type="number"
-            labelText="Tempo de ligação (em minutos)"
-            placeholder="Ex: 60"
-          />
+                <Input
+                  name="tempo"
+                  type="number"
+                  labelText="Tempo de ligação (em minutos)"
+                  placeholder="Ex: 60"
+                />
 
-          <Select
-            name="plan"
-            defaultValue={selectOptions[0]}
-            options={selectOptions}
-            labelText="Plano"
-          />
-          <Button type="submit">Calcular</Button>
-        </Form>
+                <Select
+                  name="plan"
+                  defaultValue={selectOptions[0]}
+                  options={selectOptions}
+                  labelText="Plano"
+                />
+                <Button type="submit">Calcular</Button>
+              </AnimatedForm>
+            ),
+        )}
+        {transitionSuccess.map(
+          ({ item, key, props }) =>
+            item && (
+              <AnimatedSuccess
+                key={key}
+                style={props}
+                onClick={() => setFormSuccess(!formSuccess)}
+              />
+            ),
+        )}
       </Content>
     </Container>
   );

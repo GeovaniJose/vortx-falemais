@@ -1,4 +1,6 @@
 import styled from 'styled-components';
+import { Form } from '@unform/web';
+import { animated } from 'react-spring';
 
 export const Container = styled.div`
   height: 100vh;
@@ -7,19 +9,24 @@ export const Container = styled.div`
 `;
 
 export const Content = styled.div`
-  width: 100%;
-  max-width: 700px;
-  margin-bottom: 100px;
   flex: 1;
   display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
-  align-self: center;
+  overflow: hidden;
+`;
 
-  form {
-    h1 {
-      margin-bottom: 24px;
-    }
+export const AnimatedForm = styled(animated(Form))`
+  position: absolute;
+
+  h1 {
+    margin-bottom: 24px;
   }
+`;
+
+export const AnimatedSuccess = styled(animated.section)`
+  width: 400px;
+  height: 400px;
+  position: absolute;
+  background-color: #ae8952;
 `;
