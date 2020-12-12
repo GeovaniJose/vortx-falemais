@@ -6,6 +6,7 @@ import * as Yup from 'yup';
 
 import { useHistoric } from '../../hooks/historic';
 import getValidationErrors from '../../utils/getValidationErrors';
+import formatValue from '../../utils/formatValue';
 
 import Header from '../../components/Header';
 import Input from '../../components/Input';
@@ -103,6 +104,15 @@ const Dashboard: React.FC = () => {
     return historic[historic.length - 1];
   }, [historic]);
 
+  const formattedPrices = useMemo(() => {
+    const { price, priceDiscount } = successData;
+
+    return {
+      price: price >= 0 ? formatValue(price) : '-',
+      priceDiscount: priceDiscount >= 0 ? formatValue(priceDiscount) : '-',
+    };
+  }, [successData]);
+
   return (
     <Container>
       <Header />
@@ -164,7 +174,7 @@ const Dashboard: React.FC = () => {
                     <p>{`Origem: ${successData.origem}`}</p>
                     <p>{`Destino: ${successData.destino}`}</p>
                     <p>{`Minutos: ${successData.tempo}`}</p>
-                    <strong>{`$${successData.price}`}</strong>
+                    <strong>{formattedPrices.price}</strong>
                   </Card>
                   <Card>
                     <span>
@@ -176,7 +186,7 @@ const Dashboard: React.FC = () => {
                     <p>{`Destino: ${successData.destino}`}</p>
                     <p>{`Minutos: ${successData.tempo}`}</p>
                     <p>{successData.plano}</p>
-                    <strong>{`$${successData.priceDiscount}`}</strong>
+                    <strong>{formattedPrices.priceDiscount}</strong>
                   </Card>
                 </main>
 
@@ -185,7 +195,7 @@ const Dashboard: React.FC = () => {
                   onClick={() => setFormSuccess(!formSuccess)}
                 >
                   <FiArrowLeft />
-                  Voltar para logon
+                  Realizar outro cálculo
                 </button>
               </AnimatedSuccess>
             ),
