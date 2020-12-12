@@ -85,6 +85,7 @@ const Dashboard: React.FC = () => {
           return;
         }
 
+        console.log(err);
         alert('Ocorreu um erro');
       }
     },
@@ -105,12 +106,16 @@ const Dashboard: React.FC = () => {
   }, [historic]);
 
   const formattedPrices = useMemo(() => {
-    const { price, priceDiscount } = successData;
+    if (successData) {
+      const { price, priceDiscount } = successData;
 
-    return {
-      price: price >= 0 ? formatValue(price) : '-',
-      priceDiscount: priceDiscount >= 0 ? formatValue(priceDiscount) : '-',
-    };
+      return {
+        price: price >= 0 ? formatValue(price) : '-',
+        priceDiscount: priceDiscount >= 0 ? formatValue(priceDiscount) : '-',
+      };
+    }
+
+    return {};
   }, [successData]);
 
   return (

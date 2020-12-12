@@ -58,7 +58,7 @@ export const HistoricProvider: React.FC = ({ children }) => {
       let price = -1;
       let priceDiscount = -1;
 
-      const tarifa = tariff[+origem][+destino];
+      const tarifa = tariff[+origem] ? tariff[+origem][+destino] : 0;
 
       if (tarifa) {
         price = tempo * tarifa;
