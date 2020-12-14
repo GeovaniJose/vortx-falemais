@@ -13,6 +13,10 @@ export default createGlobalStyle`
     color: #4a3a23;
     -webkit-font-smoothing: antialiased;
     overflow: hidden;
+
+    @media (max-width: 540px) {
+      overflow: auto;
+    }
   }
 
   body, input, button {

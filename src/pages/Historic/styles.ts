@@ -9,11 +9,17 @@ export const Container = styled.div`
 export const Content = styled.main`
   flex: 1;
   width: 100%;
-  max-width: 820px;
-  margin: 140px auto 80px;
+  max-width: 920px;
+  margin: 140px 0 80px;
+  padding: 0 24px;
   display: flex;
   flex-direction: column;
+  align-self: center;
   overflow: auto;
+
+  @media (max-width: 540px) {
+    margin: 16px 0 0;
+  }
 
   h1 {
     margin-bottom: 28px;

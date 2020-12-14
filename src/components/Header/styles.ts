@@ -9,6 +9,12 @@ export const Container = styled.header`
   width: 100%;
   padding: 16px 30px;
   background: #f4f2ed;
+  z-index: 10;
+
+  @media (max-width: 540px) {
+    padding: 12px 24px;
+    position: static;
+  }
 `;
 
 export const Content = styled.div`
@@ -53,5 +59,16 @@ export const Menu = styled.nav<MenuProps>`
         background: #ae8952;
         color: #f4f2ed;
       `}
+  }
+
+  @media (max-width: 376px) {
+    display: flex;
+    flex-direction: column;
+
+    button,
+    a {
+      align-self: flex-end;
+      padding: 6px;
+    }
   }
 `;

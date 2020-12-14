@@ -14,11 +14,12 @@ export const Content = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  overflow: hidden;
 `;
 
 export const AnimatedForm = styled(animated(Form))`
   position: absolute;
+  padding: 24px;
+  margin-top: 4px;
 
   h1 {
     margin-bottom: 24px;
@@ -56,6 +57,20 @@ export const AnimatedSuccess = styled(animated.section)`
     svg {
       margin-right: 12px;
       margin-bottom: 2px;
+    }
+  }
+
+  @media (max-width: 540px) {
+    top: 100px;
+
+    main {
+      flex-direction: column;
+      margin: 0;
+      padding: 0 24px;
+    }
+
+    > button {
+      margin-bottom: 48px;
     }
   }
 `;
@@ -110,5 +125,17 @@ export const Card = styled.div`
   strong {
     margin: 28px 0;
     font-size: 40px;
+  }
+
+  @media (max-width: 540px) {
+    margin: 48px 0;
+  }
+
+  @media (max-width: 320px) {
+    width: 230px;
+
+    &:last-child {
+      width: 230px;
+    }
   }
 `;

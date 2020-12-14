@@ -56,6 +56,7 @@ const Modal: React.FC<IModalProps> = ({ isOpen, setIsOpen }) => {
         },
         overlay: {
           backgroundColor: 'rgba(0, 0, 0, 0.9)',
+          zIndex: 90,
         },
       }}
     >
