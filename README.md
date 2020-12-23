@@ -2,7 +2,7 @@
  > Projeto web desenvolvido para o challenge da Vortx
 
 <div align="center">
-  <a href="https://geovanijose.github.io/vortx-falemais/">
+  <a href="https://github.com/GeovaniJose/vortx-falemais">
     <img src="./src/assets/snapshot.png" alt="#vortx-falemais" />
   </a>
 </div>
